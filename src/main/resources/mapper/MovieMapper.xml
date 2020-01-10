@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
+	例如namespace="com.szh.mapper.personMapper"就是com.szh.mapper(包名)+personMapper(personMapper.xml文件去除后缀) -->
+<mapper namespace="com.fh.mapper.OrderMapper">
+
+    <select id="queryOrderList" resultType="order" parameterType="orderQuery">
+     select a.*,b.productName 'productName',b.productPrice 'productPrice' from t_order a left join t_product b on a.productId = b.id
+     where isDel = 1
+        limit #{start},#{length}
+    </select>
+
+  <select id="queryCount" resultType="long" parameterType="orderQuery">
+        select count(*) from t_order
+    </select>
+
+    <select id="toUpdate" parameterType="int" resultType="order">
+       select * from t_order where id = #{id}
+   </select>
+
+    <update id="updateOrder" parameterType="order">
+       update t_order set
+       isDel=#{isDel}
+       where id = #{id}
+   </update>
+    <update id="updateOrderAll" parameterType="order">
+       update t_order set
+       productId=#{productId},count=#{count},subtotal=#{subtotal}
+       where id = #{id}
+   </update>
+
+    <select id="productByName" resultType="product">
+   select * from  t_product
+   </select>
+
+    <insert id="addOrder" parameterType="order">
+     insert into t_order(productId,count,subtotal,isDel)
+      values(#{productId},#{count},#{subtotal},#{isDel})
+   </insert>
+
+    <!-- <delete id="deleteMovie" parameterType="int">
+
+       delete from t_movie where id = #{id}
+
+   </delete>
+
+
+
+
+
+
+
+
+   -->
+
+</mapper>
